@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -19,8 +19,32 @@
   }
 }
 
+@theme {
+  /* Mendaftarkan warna custom sesuai desain */
+  --color-primary: #4ade80; /* Hijau cerah (tombol/card) */
+  --color-secondary: #166534; /* Hijau tua (navbar/footer) */
+  --color-accent: #dcfce7; /* Hijau sangat muda */
+
+  /* Konfigurasi Container agar otomatis tengah */
+  --container-center: true;
+  --container-padding: 1rem;
+}
+
+/* Di Tailwind v4, kita tidak perlu mendefinisikan @layer base 
+   untuk variabel root standar, tapi jika butuh style default:
+*/
+@layer base {
+  body {
+    background-color: white;
+    color: #0f172a; /* Slate-900 */
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+html {
+  scroll-behavior: smooth;
 }
