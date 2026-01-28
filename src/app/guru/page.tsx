@@ -1,4 +1,7 @@
+'use client'; // 1. Wajib untuk fitur interaktif
+
 import { Users, FileText, Search, Download } from 'lucide-react';
+import { useState } from 'react'; // 2. Import useState
 
 const teachers = [
   { no: 1, nip: '3573016612760005', nama: 'Nining Soehariyan, S.Pd', mapel: 'Fisika, Kimia', jabatan: '-' },
@@ -41,6 +44,12 @@ const materials = [
 ];
 
 export default function GuruPage() {
+  // 3. State untuk menyimpan kata kunci pencarian
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // 4. Logika Filter: Mencari berdasarkan Nama (Case Insensitive)
+  const filteredTeachers = teachers.filter((guru) => guru.nama.toLowerCase().includes(searchTerm.toLowerCase()));
+
   return (
     <div className="container mx-auto px-4 py-12 space-y-12 max-w-6xl">
       {/* SECTION 1: DIREKTORI GURU */}
@@ -50,9 +59,15 @@ export default function GuruPage() {
             <Users className="w-8 h-8" /> Direktori Guru
           </h1>
 
-          {/* Search Bar Sederhana */}
+          {/* Search Bar Berfungsi */}
           <div className="relative">
-            <input type="text" placeholder="Cari guru..." className="pl-10 pr-4 py-2 rounded-full border-none focus:ring-2 focus:ring-green-800 text-sm w-64" />
+            <input
+              type="text"
+              placeholder="Cari nama guru..."
+              value={searchTerm} // Bind value
+              onChange={(e) => setSearchTerm(e.target.value)} // Handle perubahan ketikan
+              className="pl-10 pr-4 py-2 rounded-full border-none focus:ring-2 focus:ring-green-800 text-sm w-64 outline-none"
+            />
             <Search className="absolute left-3 top-2.5 text-gray-400 w-4 h-4" />
           </div>
         </div>
@@ -71,31 +86,41 @@ export default function GuruPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {teachers.map((guru, index) => (
-                <tr key={index} className="hover:bg-green-50 transition-colors even:bg-gray-50">
-                  <td className="px-4 py-3 text-center font-medium">{guru.no}</td>
-                  <td className="px-4 py-3 font-mono text-xs">{guru.nip}</td>
-                  <td className="px-4 py-3 font-semibold">{guru.nama}</td>
-                  <td className="px-4 py-3">{guru.mapel}</td>
-                  <td className="px-4 py-3 text-gray-600">{guru.jabatan}</td>
-                  <td className="px-4 py-3 text-center">
-                    <button className="text-green-700 hover:text-green-900 bg-green-100 p-1.5 rounded-md transition-colors" title="Lihat Detail">
-                      <FileText size={16} />
-                    </button>
+              {filteredTeachers.length > 0 ? (
+                // 5. Render Data Hasil Filter
+                filteredTeachers.map((guru, index) => (
+                  <tr key={index} className="hover:bg-green-50 transition-colors even:bg-gray-50">
+                    <td className="px-4 py-3 text-center font-medium">{guru.no}</td>
+                    <td className="px-4 py-3 font-mono text-xs">{guru.nip}</td>
+                    <td className="px-4 py-3 font-semibold">{guru.nama}</td>
+                    <td className="px-4 py-3">{guru.mapel}</td>
+                    <td className="px-4 py-3 text-gray-600">{guru.jabatan}</td>
+                    <td className="px-4 py-3 text-center">
+                      <button className="text-green-700 hover:text-green-900 bg-green-100 p-1.5 rounded-md transition-colors" title="Lihat Detail">
+                        <FileText size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                // Tampilan jika tidak ada hasil
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-gray-500 font-medium">
+                    Tidak ditemukan guru dengan nama "{searchTerm}"
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
 
         {/* Pagination Dummy */}
         <div className="mt-4 flex justify-end gap-2 text-xs font-bold text-green-900">
-          <span>Halaman 1 dari 3</span>
+          <span>Halaman 1 dari 1</span>
         </div>
       </section>
 
-      {/* SECTION 2: MATERI AJAR */}
+      {/* SECTION 2: MATERI AJAR (Tidak Berubah) */}
       <section className="bg-[#84cc16] rounded-[2rem] p-6 md:p-10 shadow-sm">
         <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center flex justify-center items-center gap-2">
           <FileText className="w-8 h-8" /> Materi Ajar
@@ -104,12 +129,9 @@ export default function GuruPage() {
         <div className="space-y-4">
           {materials.map((item, idx) => (
             <div key={idx} className="bg-white/90 p-4 rounded-xl flex flex-col md:flex-row gap-4 items-start md:items-center hover:shadow-md transition-shadow">
-              {/* Icon PDF */}
               <div className="bg-red-100 text-red-600 p-3 rounded-lg">
                 <FileText size={24} />
               </div>
-
-              {/* Content */}
               <div className="flex-1">
                 <h3 className="font-bold text-green-800 text-lg">{item.title}</h3>
                 <p className="text-sm text-gray-700 mt-1">{item.desc}</p>
@@ -118,8 +140,6 @@ export default function GuruPage() {
                   <span>Telah diakses {item.hits} kali</span>
                 </div>
               </div>
-
-              {/* Download Button */}
               <button className="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-green-800 transition-colors whitespace-nowrap">
                 <Download size={16} /> Unduh
               </button>
