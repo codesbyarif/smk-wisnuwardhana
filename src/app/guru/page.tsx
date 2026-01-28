@@ -106,7 +106,8 @@ export default function GuruPage() {
                 // Tampilan jika tidak ada hasil
                 <tr>
                   <td colSpan={6} className="px-4 py-8 text-center text-gray-500 font-medium">
-                    Tidak ditemukan guru dengan nama "{searchTerm}"
+                    {/* PERBAIKAN DI SINI: Ganti " menjadi &quot; */}
+                    Tidak ditemukan guru dengan nama &quot;{searchTerm}&quot;
                   </td>
                 </tr>
               )}

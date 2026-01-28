@@ -17,7 +17,8 @@ export default function PencarianPage({ searchParams }: { searchParams: { q: str
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-gray-900">Hasil Pencarian</h1>
         <p className="text-gray-600 mt-2">
-          Menampilkan hasil untuk kata kunci: <span className="font-bold text-[#1f7a4e]">"{query}"</span>
+          {/* PERBAIKAN DI SINI: Ganti " menjadi &quot; */}
+          Menampilkan hasil untuk kata kunci: <span className="font-bold text-[#1f7a4e]">&quot;{query}&quot;</span>
         </p>
       </div>
 
